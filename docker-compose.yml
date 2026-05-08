@@ -1,0 +1,43 @@
+services:
+  gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - SERVICE_NAME=gateway
+    container_name: alvo_gateway
+    environment:
+      - GOMEMLIMIT=110MiB # Otimização de memória para o Go aproximado do limits do deploy e menor pra não bater no muro
+    ports:
+      - "8080:8080"
+    deploy:
+      resources:
+        limits:
+          cpus: '3.0'
+          memory: 128M
+    networks:
+      - rede_bombardeio
+
+  worker_bom:
+    build:
+      context: .
+      args:
+        - SERVICE_NAME=worker
+    depends_on:
+      - gateway
+    networks:
+      - rede_bombardeio
+
+  worker_malvado:
+    build:
+      context: .
+      args:
+        - SERVICE_NAME=worker_malvado
+    depends_on:
+      - gateway
+    networks:
+      - rede_bombardeio
+
+networks:
+  rede_bombardeio:
+    driver: bridge # A rede privada para os containers
