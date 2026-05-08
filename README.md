@@ -14,7 +14,6 @@ Gateway de validação criptográfica (HMAC) focado em alta concorrência e baix
 - Concorrência Lock-free (Atomic)
 
 ### Como rodar:
-\`\`\`bash
+```
 docker-compose up --build
-\`\`\`
-EOF
+```
